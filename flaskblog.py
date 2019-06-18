@@ -37,14 +37,21 @@ def about():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 	form = RegistrationForm()
-	if form.validate_on_submit:
+	if form.validate_on_submit():
 		flash(f'Account created for {form.username.data}!', 'success')
+		return redirect(url_for('home'))
 	return render_template('register.html', title = 'Register', form = form)
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	return render_template('login.html', title = 'Login', form = form)
+	if form.validate_on_submit():
+		if form.email.data == 'admin@log.com' and form.password.data == '123':
+			flash('You have been login', 'success')
+			return redirect(url_for('home'))
+		else:
+			flash('Login unsuccessful.','danger')
+	return render_template('login1.html', title = 'Login', form = form)
 
 
 
